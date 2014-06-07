@@ -51,7 +51,7 @@ revealjs:
 
 --- .custom
 
-## ... it can even generate some plots
+## ... and it can generate cool plots
 
 
 <iframe src='

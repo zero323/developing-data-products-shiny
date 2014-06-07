@@ -58,7 +58,7 @@ dt.agg.year <- dt[, list(Count=sum(COUNT), Injuries=sum(INJURIES), Fatalities=su
 
 --- .custom
 
-## ... it can even generate some plots
+## ... and it can generate cool plots
 
 
 ```{r nvd3plot2, results = 'asis', comment = NA, message = F, echo = F} 
