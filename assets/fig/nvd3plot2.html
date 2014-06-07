@@ -1,0 +1,721 @@
+<!doctype HTML>
+<meta charset = 'utf-8'>
+<html>
+  <head>
+    <link rel='stylesheet' href='http://nvd3.org/assets/css/nv.d3.css'>
+    
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js' type='text/javascript'></script>
+    <script src='http://d3js.org/d3.v3.min.js' type='text/javascript'></script>
+    <script src='http://timelyportfolio.github.io/rCharts_nvd3_tests/libraries/widgets/nvd3/js/nv.d3.min-new.js' type='text/javascript'></script>
+    <script src='http://nvd3.org/assets/lib/fisheye.js' type='text/javascript'></script>
+    
+    <style>
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    </style>
+    
+  </head>
+  <body >
+    
+    <div id = 'populationImpact' class = 'rChart nvd3'></div>    
+    <script type='text/javascript'>
+ $(document).ready(function(){
+      drawpopulationImpact()
+    });
+    function drawpopulationImpact(){  
+      var opts = {
+ "dom": "populationImpact",
+"width":    800,
+"height":    400,
+"x": "YEAR",
+"y": "value",
+"group": "variable",
+"type": "stackedAreaChart",
+"id": "populationImpact" 
+},
+        data = [
+ {
+ "YEAR": 1950,
+"variable": "Fatalities",
+"value": 70 
+},
+{
+ "YEAR": 1950,
+"variable": "Injuries",
+"value": 659 
+},
+{
+ "YEAR": 1951,
+"variable": "Fatalities",
+"value": 34 
+},
+{
+ "YEAR": 1951,
+"variable": "Injuries",
+"value": 524 
+},
+{
+ "YEAR": 1952,
+"variable": "Fatalities",
+"value": 230 
+},
+{
+ "YEAR": 1952,
+"variable": "Injuries",
+"value": 1915 
+},
+{
+ "YEAR": 1953,
+"variable": "Fatalities",
+"value": 519 
+},
+{
+ "YEAR": 1953,
+"variable": "Injuries",
+"value": 5131 
+},
+{
+ "YEAR": 1954,
+"variable": "Fatalities",
+"value": 36 
+},
+{
+ "YEAR": 1954,
+"variable": "Injuries",
+"value": 715 
+},
+{
+ "YEAR": 1955,
+"variable": "Fatalities",
+"value": 129 
+},
+{
+ "YEAR": 1955,
+"variable": "Injuries",
+"value": 926 
+},
+{
+ "YEAR": 1956,
+"variable": "Fatalities",
+"value": 83 
+},
+{
+ "YEAR": 1956,
+"variable": "Injuries",
+"value": 1355 
+},
+{
+ "YEAR": 1957,
+"variable": "Fatalities",
+"value": 193 
+},
+{
+ "YEAR": 1957,
+"variable": "Injuries",
+"value": 1976 
+},
+{
+ "YEAR": 1958,
+"variable": "Fatalities",
+"value": 67 
+},
+{
+ "YEAR": 1958,
+"variable": "Injuries",
+"value": 535 
+},
+{
+ "YEAR": 1959,
+"variable": "Fatalities",
+"value": 58 
+},
+{
+ "YEAR": 1959,
+"variable": "Injuries",
+"value": 734 
+},
+{
+ "YEAR": 1960,
+"variable": "Fatalities",
+"value": 46 
+},
+{
+ "YEAR": 1960,
+"variable": "Injuries",
+"value": 737 
+},
+{
+ "YEAR": 1961,
+"variable": "Fatalities",
+"value": 52 
+},
+{
+ "YEAR": 1961,
+"variable": "Injuries",
+"value": 1087 
+},
+{
+ "YEAR": 1962,
+"variable": "Fatalities",
+"value": 30 
+},
+{
+ "YEAR": 1962,
+"variable": "Injuries",
+"value": 551 
+},
+{
+ "YEAR": 1963,
+"variable": "Fatalities",
+"value": 31 
+},
+{
+ "YEAR": 1963,
+"variable": "Injuries",
+"value": 538 
+},
+{
+ "YEAR": 1964,
+"variable": "Fatalities",
+"value": 73 
+},
+{
+ "YEAR": 1964,
+"variable": "Injuries",
+"value": 1148 
+},
+{
+ "YEAR": 1965,
+"variable": "Fatalities",
+"value": 301 
+},
+{
+ "YEAR": 1965,
+"variable": "Injuries",
+"value": 5197 
+},
+{
+ "YEAR": 1966,
+"variable": "Fatalities",
+"value": 98 
+},
+{
+ "YEAR": 1966,
+"variable": "Injuries",
+"value": 2030 
+},
+{
+ "YEAR": 1967,
+"variable": "Fatalities",
+"value": 114 
+},
+{
+ "YEAR": 1967,
+"variable": "Injuries",
+"value": 2144 
+},
+{
+ "YEAR": 1968,
+"variable": "Fatalities",
+"value": 131 
+},
+{
+ "YEAR": 1968,
+"variable": "Injuries",
+"value": 2522 
+},
+{
+ "YEAR": 1969,
+"variable": "Fatalities",
+"value": 66 
+},
+{
+ "YEAR": 1969,
+"variable": "Injuries",
+"value": 1311 
+},
+{
+ "YEAR": 1970,
+"variable": "Fatalities",
+"value": 73 
+},
+{
+ "YEAR": 1970,
+"variable": "Injuries",
+"value": 1355 
+},
+{
+ "YEAR": 1971,
+"variable": "Fatalities",
+"value": 159 
+},
+{
+ "YEAR": 1971,
+"variable": "Injuries",
+"value": 2723 
+},
+{
+ "YEAR": 1972,
+"variable": "Fatalities",
+"value": 27 
+},
+{
+ "YEAR": 1972,
+"variable": "Injuries",
+"value": 976 
+},
+{
+ "YEAR": 1973,
+"variable": "Fatalities",
+"value": 89 
+},
+{
+ "YEAR": 1973,
+"variable": "Injuries",
+"value": 2406 
+},
+{
+ "YEAR": 1974,
+"variable": "Fatalities",
+"value": 366 
+},
+{
+ "YEAR": 1974,
+"variable": "Injuries",
+"value": 6824 
+},
+{
+ "YEAR": 1975,
+"variable": "Fatalities",
+"value": 60 
+},
+{
+ "YEAR": 1975,
+"variable": "Injuries",
+"value": 1457 
+},
+{
+ "YEAR": 1976,
+"variable": "Fatalities",
+"value": 44 
+},
+{
+ "YEAR": 1976,
+"variable": "Injuries",
+"value": 1195 
+},
+{
+ "YEAR": 1977,
+"variable": "Fatalities",
+"value": 43 
+},
+{
+ "YEAR": 1977,
+"variable": "Injuries",
+"value": 771 
+},
+{
+ "YEAR": 1978,
+"variable": "Fatalities",
+"value": 53 
+},
+{
+ "YEAR": 1978,
+"variable": "Injuries",
+"value": 919 
+},
+{
+ "YEAR": 1979,
+"variable": "Fatalities",
+"value": 84 
+},
+{
+ "YEAR": 1979,
+"variable": "Injuries",
+"value": 3014 
+},
+{
+ "YEAR": 1980,
+"variable": "Fatalities",
+"value": 28 
+},
+{
+ "YEAR": 1980,
+"variable": "Injuries",
+"value": 1157 
+},
+{
+ "YEAR": 1981,
+"variable": "Fatalities",
+"value": 24 
+},
+{
+ "YEAR": 1981,
+"variable": "Injuries",
+"value": 798 
+},
+{
+ "YEAR": 1982,
+"variable": "Fatalities",
+"value": 64 
+},
+{
+ "YEAR": 1982,
+"variable": "Injuries",
+"value": 1276 
+},
+{
+ "YEAR": 1983,
+"variable": "Fatalities",
+"value": 37 
+},
+{
+ "YEAR": 1983,
+"variable": "Injuries",
+"value": 816 
+},
+{
+ "YEAR": 1984,
+"variable": "Fatalities",
+"value": 160 
+},
+{
+ "YEAR": 1984,
+"variable": "Injuries",
+"value": 2858 
+},
+{
+ "YEAR": 1985,
+"variable": "Fatalities",
+"value": 112 
+},
+{
+ "YEAR": 1985,
+"variable": "Injuries",
+"value": 1513 
+},
+{
+ "YEAR": 1986,
+"variable": "Fatalities",
+"value": 51 
+},
+{
+ "YEAR": 1986,
+"variable": "Injuries",
+"value": 915 
+},
+{
+ "YEAR": 1987,
+"variable": "Fatalities",
+"value": 89 
+},
+{
+ "YEAR": 1987,
+"variable": "Injuries",
+"value": 1416 
+},
+{
+ "YEAR": 1988,
+"variable": "Fatalities",
+"value": 55 
+},
+{
+ "YEAR": 1988,
+"variable": "Injuries",
+"value": 1030 
+},
+{
+ "YEAR": 1989,
+"variable": "Fatalities",
+"value": 79 
+},
+{
+ "YEAR": 1989,
+"variable": "Injuries",
+"value": 1675 
+},
+{
+ "YEAR": 1990,
+"variable": "Fatalities",
+"value": 95 
+},
+{
+ "YEAR": 1990,
+"variable": "Injuries",
+"value": 1824 
+},
+{
+ "YEAR": 1991,
+"variable": "Fatalities",
+"value": 73 
+},
+{
+ "YEAR": 1991,
+"variable": "Injuries",
+"value": 1355 
+},
+{
+ "YEAR": 1992,
+"variable": "Fatalities",
+"value": 54 
+},
+{
+ "YEAR": 1992,
+"variable": "Injuries",
+"value": 1754 
+},
+{
+ "YEAR": 1993,
+"variable": "Fatalities",
+"value": 293 
+},
+{
+ "YEAR": 1993,
+"variable": "Injuries",
+"value": 2135 
+},
+{
+ "YEAR": 1994,
+"variable": "Fatalities",
+"value": 342 
+},
+{
+ "YEAR": 1994,
+"variable": "Injuries",
+"value": 4158 
+},
+{
+ "YEAR": 1995,
+"variable": "Fatalities",
+"value": 1476 
+},
+{
+ "YEAR": 1995,
+"variable": "Injuries",
+"value": 4480 
+},
+{
+ "YEAR": 1996,
+"variable": "Fatalities",
+"value": 519 
+},
+{
+ "YEAR": 1996,
+"variable": "Injuries",
+"value": 2712 
+},
+{
+ "YEAR": 1997,
+"variable": "Fatalities",
+"value": 576 
+},
+{
+ "YEAR": 1997,
+"variable": "Injuries",
+"value": 3609 
+},
+{
+ "YEAR": 1998,
+"variable": "Fatalities",
+"value": 674 
+},
+{
+ "YEAR": 1998,
+"variable": "Injuries",
+"value": 11160 
+},
+{
+ "YEAR": 1999,
+"variable": "Fatalities",
+"value": 895 
+},
+{
+ "YEAR": 1999,
+"variable": "Injuries",
+"value": 4999 
+},
+{
+ "YEAR": 2000,
+"variable": "Fatalities",
+"value": 472 
+},
+{
+ "YEAR": 2000,
+"variable": "Injuries",
+"value": 2778 
+},
+{
+ "YEAR": 2001,
+"variable": "Fatalities",
+"value": 448 
+},
+{
+ "YEAR": 2001,
+"variable": "Injuries",
+"value": 2693 
+},
+{
+ "YEAR": 2002,
+"variable": "Fatalities",
+"value": 485 
+},
+{
+ "YEAR": 2002,
+"variable": "Injuries",
+"value": 2813 
+},
+{
+ "YEAR": 2003,
+"variable": "Fatalities",
+"value": 424 
+},
+{
+ "YEAR": 2003,
+"variable": "Injuries",
+"value": 2904 
+},
+{
+ "YEAR": 2004,
+"variable": "Fatalities",
+"value": 334 
+},
+{
+ "YEAR": 2004,
+"variable": "Injuries",
+"value": 2378 
+},
+{
+ "YEAR": 2005,
+"variable": "Fatalities",
+"value": 459 
+},
+{
+ "YEAR": 2005,
+"variable": "Injuries",
+"value": 1830 
+},
+{
+ "YEAR": 2006,
+"variable": "Fatalities",
+"value": 586 
+},
+{
+ "YEAR": 2006,
+"variable": "Injuries",
+"value": 3354 
+},
+{
+ "YEAR": 2007,
+"variable": "Fatalities",
+"value": 410 
+},
+{
+ "YEAR": 2007,
+"variable": "Injuries",
+"value": 2169 
+},
+{
+ "YEAR": 2008,
+"variable": "Fatalities",
+"value": 474 
+},
+{
+ "YEAR": 2008,
+"variable": "Injuries",
+"value": 2685 
+},
+{
+ "YEAR": 2009,
+"variable": "Fatalities",
+"value": 294 
+},
+{
+ "YEAR": 2009,
+"variable": "Injuries",
+"value": 1214 
+},
+{
+ "YEAR": 2010,
+"variable": "Fatalities",
+"value": 412 
+},
+{
+ "YEAR": 2010,
+"variable": "Injuries",
+"value": 1842 
+},
+{
+ "YEAR": 2011,
+"variable": "Fatalities",
+"value": 981 
+},
+{
+ "YEAR": 2011,
+"variable": "Injuries",
+"value": 7770 
+} 
+]
+  
+      if(!(opts.type==="pieChart" || opts.type==="sparklinePlus" || opts.type==="bulletChart")) {
+        var data = d3.nest()
+          .key(function(d){
+            //return opts.group === undefined ? 'main' : d[opts.group]
+            //instead of main would think a better default is opts.x
+            return opts.group === undefined ? opts.y : d[opts.group];
+          })
+          .entries(data);
+      }
+      
+      if (opts.disabled != undefined){
+        data.map(function(d, i){
+          d.disabled = opts.disabled[i]
+        })
+      }
+      
+      nv.addGraph(function() {
+        var chart = nv.models[opts.type]()
+          .width(opts.width)
+          .height(opts.height)
+          
+        if (opts.type != "bulletChart"){
+          chart
+            .x(function(d) { return d[opts.x] })
+            .y(function(d) { return d[opts.y] })
+        }
+          
+         
+        chart
+  .margin({
+ "left":    100 
+})
+          
+        chart.xAxis
+  .axisLabel("Year")
+  .width(    70)
+
+        
+        
+        chart.yAxis
+  .axisLabel("Affected")
+  .width(    80)
+      
+       d3.select("#" + opts.id)
+        .append('svg')
+        .datum(data)
+        .transition().duration(500)
+        .call(chart);
+
+       nv.utils.windowResize(chart.update);
+       return chart;
+      });
+    };
+</script>
+    
+    <script></script>    
+  </body>
+</html>
