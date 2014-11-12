@@ -6,6 +6,7 @@
 #
 
 library(shiny)
+library(rCharts)
 
 shinyUI(
     navbarPage("Storm Database Explorer",
