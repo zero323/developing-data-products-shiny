@@ -13,7 +13,7 @@ dt$EVTYPE <- tolower(dt$EVTYPE)
 evtypes <<- sort(unique(dt$EVTYPE))
 
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
     values <- reactiveValues()
     values$evtypes <- evtypes
 
