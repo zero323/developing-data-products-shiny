@@ -27,7 +27,7 @@ shinyUI(
                     tabsetPanel(
                         
                         # Data by state
-                        tabPanel('By state',
+                        tabPanel(p(icon("map-marker"), "By state"),
                             column(3,
                                 wellPanel(
                                     radioButtons(
@@ -52,7 +52,7 @@ shinyUI(
                         ),
                         
                         # Time series data
-                        tabPanel('By year',
+                        tabPanel(p(icon("line-chart"), "By year"),
                                  h4('Number of events by year', align = "center"),
                                  showOutput("eventsByYear", "nvd3"),
                                  h4('Population impact by year', align = "center"),
@@ -64,7 +64,7 @@ shinyUI(
 
                         
                         # Data 
-                        tabPanel('Data',
+                        tabPanel(p(icon("table"), "Data"),
                             dataTableOutput(outputId="table"),
                             downloadButton('downloadData', 'Download')
                         )
