@@ -18,7 +18,9 @@ shinyUI(
                         max = 2011, 
                         value = c(1993, 2011),
                         format="####"),
-                    uiOutput("evtypeControls")
+                    uiOutput("evtypeControls"),
+                    actionButton(inputId = "clear_all", label = "Clear selection", icon = NULL),
+                    actionButton(inputId = "select_all", label = "Select all", icon = NULL)
                 ),
   
                 mainPanel(
