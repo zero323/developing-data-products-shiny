@@ -13,8 +13,9 @@ dt$EVTYPE <- tolower(dt$EVTYPE)
 evtypes <<- sort(unique(dt$EVTYPE))
 
 
-
 shinyServer(function(input, output) {
+    values <- reactiveValues()
+    values$evtypes <- evtypes
 
     dt.agg <- reactive({
         tmp <- merge(
@@ -87,9 +88,19 @@ shinyServer(function(input, output) {
         print(p)
     })
     
+    observe({
+        if(input$clear_all == 0) return()
+        values$evtypes <- c()
+    })
+    
+    observe({
+        if(input$select_all == 0) return()
+        values$evtypes <- evtypes
+    })
+    
     output$evtypeControls <- renderUI({
         if(1) {
-            checkboxGroupInput('evtypes', 'Event types', evtypes, selected=evtypes)
+            checkboxGroupInput('evtypes', 'Event types', evtypes, selected=values$evtypes)
         }
     })
     
