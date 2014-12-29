@@ -6,6 +6,8 @@ library(rCharts)
 library(reshape2)
 library(markdown)
 library(mapproj)
+library(ggvis)
+library(dplyr)
 
 states_map <- map_data("state")
 dt <- fread('data/events.agg.csv')
