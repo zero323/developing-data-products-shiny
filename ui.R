@@ -19,8 +19,8 @@ shinyUI(
                         value = c(1993, 2011),
                         format="####"),
                     uiOutput("evtypeControls"),
-                    actionButton(inputId = "clear_all", label = "Clear selection", icon = NULL),
-                    actionButton(inputId = "select_all", label = "Select all", icon = NULL)
+                    actionButton(inputId = "clear_all", label = "Clear selection", icon = icon("check-square")),
+                    actionButton(inputId = "select_all", label = "Select all", icon = icon("check-square-o"))
                 ),
   
                 mainPanel(
