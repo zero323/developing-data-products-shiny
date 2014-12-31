@@ -9,6 +9,31 @@ library(mapproj)
 library(ggvis)
 library(dplyr)
 
+#' Aggregate dataset by state
+#' 
+#' @param dt data.table
+#' @param year_min integer
+#' @param year_max integer
+#' @param evtypes character vector
+#' @return data.table
+#'
+aggregate_by_state <- function(dt, year_min, year_max, evtypes) {
+    replace_na <- function(x) ifelse(is.na(x), 0, x)
+    round_2 <- function(x) round(x, 2)
+    
+    states <- data.table(STATE=sort(unique(dt$STATE)))
+    
+    aggregated <- dt %>% filter(YEAR >= year_min, YEAR <= year_max, EVTYPE %in% evtypes) %>%
+            group_by(STATE) %>%
+            summarise_each(funs(sum), COUNT:CROPDMG)
+
+    # We want all states to be present even if nothing happened
+    left_join(states,  aggregated, by = "STATE") %>%
+        mutate_each(funs(replace_na), FATALITIES:CROPDMG) %>%
+        mutate_each(funs(round_2), PROPDMG, CROPDMG)    
+}
+
+
 states_map <- map_data("state")
 dt <- fread('data/events.agg.csv')
 dt$EVTYPE <- tolower(dt$EVTYPE)
@@ -20,22 +45,7 @@ shinyServer(function(input, output, session) {
     values$evtypes <- evtypes
 
     dt.agg <- reactive({
-        tmp <- merge(
-            data.table(STATE=sort(unique(dt$STATE))),
-            dt[
-                YEAR >= input$range[1] & YEAR <= input$range[2] & EVTYPE %in% input$evtypes,
-                list(
-                    COUNT=sum(COUNT),
-                    INJURIES=sum(INJURIES),
-                    FATALITIES=sum(FATALITIES),
-                    PROPDMG=round(sum(PROPDMG), 2),
-                    CROPDMG=round(sum(CROPDMG), 2)
-                ),
-                by=list(STATE)],
-            by=c('STATE'), all=TRUE
-        )
-        tmp[is.na(tmp)] <- 0
-        tmp
+        aggregate_by_state(dt, input$range[1], input$range[2], input$evtypes)
     })
     
     dt.agg.year <- reactive({
