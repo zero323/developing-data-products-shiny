@@ -35,8 +35,7 @@ aggregate_by_state <- function(dt, year_min, year_max, evtypes) {
 
 
 states_map <- map_data("state")
-dt <- fread('data/events.agg.csv')
-dt$EVTYPE <- tolower(dt$EVTYPE)
+dt <- fread('data/events.agg.csv') %>% mutate(EVTYPE = tolower(EVTYPE))
 evtypes <<- sort(unique(dt$EVTYPE))
 
 
@@ -44,10 +43,13 @@ shinyServer(function(input, output, session) {
     values <- reactiveValues()
     values$evtypes <- evtypes
 
+    
+    # Prepare dataset for maps
     dt.agg <- reactive({
         aggregate_by_state(dt, input$range[1], input$range[2], input$evtypes)
     })
     
+    # Prepare dataset for time series
     dt.agg.year <- reactive({
         dt[
             YEAR >= input$range[1] & YEAR <= input$range[2] & EVTYPE %in% input$evtypes,
