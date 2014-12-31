@@ -33,6 +33,24 @@ aggregate_by_state <- function(dt, year_min, year_max, evtypes) {
         mutate_each(funs(round_2), PROPDMG, CROPDMG)    
 }
 
+#' Aggregate dataset by year
+#' 
+#' @param dt data.table
+#' @param year_min integer
+#' @param year_max integer
+#' @param evtypes character vector
+#' @return data.table
+#'
+aggregate_by_year <- function(dt, year_min, year_max, evtypes) {
+    round_2 <- function(x) round(x, 2)
+    
+    # Filter
+    dt %>% filter(YEAR >= year_min, YEAR <= year_max, EVTYPE %in% evtypes) %>%
+    # Group and aggregate
+    group_by(YEAR) %>% summarise_each(funs(sum), COUNT:CROPDMG) %>%
+    # Round
+    mutate_each(funs(round_2), PROPDMG, CROPDMG)    
+}
 
 states_map <- map_data("state")
 dt <- fread('data/events.agg.csv') %>% mutate(EVTYPE = tolower(EVTYPE))
@@ -51,17 +69,7 @@ shinyServer(function(input, output, session) {
     
     # Prepare dataset for time series
     dt.agg.year <- reactive({
-        dt[
-            YEAR >= input$range[1] & YEAR <= input$range[2] & EVTYPE %in% input$evtypes,
-            list(
-                COUNT=sum(COUNT),
-                INJURIES=sum(INJURIES),
-                PROPDMG=round(sum(PROPDMG), 2),
-                FATALITIES=sum(FATALITIES),
-                CROPDMG=round(sum(CROPDMG), 2)
-            ),
-            by=list(YEAR)
-        ]
+        aggregate_by_year(dt, input$range[1], input$range[2], input$evtypes)
     })
         
    
