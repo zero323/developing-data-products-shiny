@@ -102,7 +102,7 @@ plot_population_impact_by_state <- function (dt, states_map, year_min, year_max)
     p <- p + geom_map(aes(fill = Affected), map = states_map, colour='black') + expand_limits(x = states_map$long, y = states_map$lat)
     p <- p + coord_map() + theme_bw()
     p <- p + labs(x = "Long", y = "Lat", title = title)
-    p
+    p + scale_fill_gradient(low = "#fff5eb", high = "#d94801")
 }
 
 #' Prepare map of economic impact
@@ -119,7 +119,7 @@ plot_economic_impact_by_state <- function (dt, states_map, year_min, year_max) {
     p <- p + geom_map(aes(fill = Damages), map = states_map, colour='black') + expand_limits(x = states_map$long, y = states_map$lat)
     p <- p + coord_map() + theme_bw()
     p <- p + labs(x = "Long", y = "Lat", title = title)
-    p
+    p + scale_fill_gradient(low = "#fff5eb", high = "#d94801")
 }
 
 # Load data
