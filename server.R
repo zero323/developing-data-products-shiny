@@ -52,11 +52,83 @@ aggregate_by_year <- function(dt, year_min, year_max, evtypes) {
     mutate_each(funs(round_2), PROPDMG, CROPDMG)    
 }
 
+#' Add Affected column based on category
+#'
+#' @param dt data.table
+#' @param category character
+#' @return data.table
+#'
+compute_affected <- function(dt, category) {
+    dt %>% mutate(Affected = {
+        if(category == 'both') {
+            INJURIES + FATALITIES
+        } else if(category == 'fatalities') {
+            FATALITIES
+        } else {
+            INJURIES
+        }
+    })
+}
+
+#' Add Damages column based on category
+#' 
+#' @param dt data.table
+#' @param category character
+#' @return data.table
+#'
+compute_damages <- function(dt, category) {
+    dt %>% mutate(Damages = {
+        if(category == 'both') {
+            PROPDMG + CROPDMG
+        } else if(category == 'crops') {
+            CROPDMG
+        } else {
+            PROPDMG
+        }
+    })
+}
+
+#' Prepare map of population impact
+#' 
+#' @param dt data.table
+#' @param states_map data.frame returned from map_data("state")
+#' @param year_min integer
+#' @param year_max integer
+#' @return ggplot
+#' 
+plot_population_impact_by_state <- function (dt, states_map, year_min, year_max) {
+    title <- paste("Population impact", year_min, "-", year_max, "(number of affected)")
+    p <- ggplot(dt, aes(map_id = STATE))
+    p <- p + geom_map(aes(fill = Affected), map = states_map, colour='black') + expand_limits(x = states_map$long, y = states_map$lat)
+    p <- p + coord_map() + theme_bw()
+    p <- p + labs(x = "Long", y = "Lat", title = title)
+    p
+}
+
+#' Prepare map of economic impact
+#' 
+#' @param dt data.table
+#' @param states_map data.frame returned from map_data("state")
+#' @param year_min integer
+#' @param year_max integer
+#' @return ggplot
+#' 
+plot_economic_impact_by_state <- function (dt, states_map, year_min, year_max) {
+    title <- paste("Economic impact", year_min, "-", year_max, "(Million USD)")
+    p <- ggplot(dt, aes(map_id = STATE))
+    p <- p + geom_map(aes(fill = Damages), map = states_map, colour='black') + expand_limits(x = states_map$long, y = states_map$lat)
+    p <- p + coord_map() + theme_bw()
+    p <- p + labs(x = "Long", y = "Lat", title = title)
+    p
+}
+
+# Load data
 states_map <- map_data("state")
 dt <- fread('data/events.agg.csv') %>% mutate(EVTYPE = tolower(EVTYPE))
 evtypes <<- sort(unique(dt$EVTYPE))
 
 
+# Shiny server 
 shinyServer(function(input, output, session) {
     values <- reactiveValues()
     values$evtypes <- evtypes
@@ -74,40 +146,21 @@ shinyServer(function(input, output, session) {
         
    
     output$populationImpactByState <- renderPlot({
-        data <- dt.agg()
-        if(input$populationCategory == 'both') {
-            data$Affected <- data$INJURIES + data$FATALITIES
-        } else if(input$populationCategory == 'fatalities') {
-            data$Affected <- data$FATALITIES
-        } else {
-            data$Affected <-data$INJURIES
-        }
-        
-        title <- paste("Population impact", input$range[1], "-", input$range[2], "(number of affected)")
-        p <- ggplot(data, aes(map_id = STATE))
-        p <- p + geom_map(aes(fill = Affected), map = states_map, colour='black') + expand_limits(x = states_map$long, y = states_map$lat)
-        p <- p + coord_map() + theme_bw()
-        p <- p + labs(x = "Long", y = "Lat", title = title)
-        print(p)
+        print(plot_population_impact_by_state (
+            dt = compute_affected(dt.agg(), input$populationCategory),
+            states_map = states_map, 
+            year_min = input$range[1],
+            year_max = input$range[2]
+        ))
     })
     
     output$economicImpactByState <- renderPlot({
-        data <- dt.agg()
-        
-        if(input$economicCategory == 'both') {
-            data$Damages <- data$PROPDMG + data$CROPDMG
-        } else if(input$economicCategory == 'crops') {
-            data$Damages <- data$CROPDMG
-        } else {
-            data$Damages <- data$PROPDMG
-        }
-        
-        title <- paste("Economic impact", input$range[1], "-", input$range[2], "(Million USD)")
-        p <- ggplot(data, aes(map_id = STATE))
-        p <- p + geom_map(aes(fill = Damages), map = states_map, colour='black') + expand_limits(x = states_map$long, y = states_map$lat)
-        p <- p + coord_map() + theme_bw()
-        p <- p + labs(x = "Long", y = "Lat", title = title)
-        print(p)
+        print(plot_economic_impact_by_state(
+            dt = compute_damages(dt.agg(), input$economicCategory),
+            states_map = states_map, 
+            year_min = input$range[1],
+            year_max = input$range[2]
+        ))
     })
     
     observe({
