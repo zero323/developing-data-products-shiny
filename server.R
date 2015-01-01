@@ -29,9 +29,28 @@ evtypes <- sort(unique(dt$EVTYPE))
 
 # Shiny server 
 shinyServer(function(input, output, session) {
+    
+    # Define and initialize reactive values
     values <- reactiveValues()
     values$evtypes <- evtypes
+    
+    # Create event type checkbox
+    output$evtypeControls <- renderUI({
+        checkboxGroupInput('evtypes', 'Event types', evtypes, selected=values$evtypes)
+    })
+    
+    # Add observers on clear and select all buttons
+    observe({
+        if(input$clear_all == 0) return()
+        values$evtypes <- c()
+    })
+    
+    observe({
+        if(input$select_all == 0) return()
+        values$evtypes <- evtypes
+    })
 
+    # Preapre datasets
     
     # Prepare dataset for maps
     dt.agg <- reactive({
@@ -42,43 +61,8 @@ shinyServer(function(input, output, session) {
     dt.agg.year <- reactive({
         aggregate_by_year(dt, input$range[1], input$range[2], input$evtypes)
     })
-   
-    output$populationImpactByState <- renderPlot({
-        print(plot_impact_by_state (
-            dt = compute_affected(dt.agg(), input$populationCategory),
-            states_map = states_map, 
-            year_min = input$range[1],
-            year_max = input$range[2],
-            title = "Population impact %d - %d (number of affected)",
-            fill = "Affected"
-        ))
-    })
     
-    output$economicImpactByState <- renderPlot({
-        print(plot_impact_by_state(
-            dt = compute_damages(dt.agg(), input$economicCategory),
-            states_map = states_map, 
-            year_min = input$range[1],
-            year_max = input$range[2],
-            title = "Economic impact %d - %d (Million USD)",
-            fill = "Damages"
-        ))
-    })
-    
-    observe({
-        if(input$clear_all == 0) return()
-        values$evtypes <- c()
-    })
-    
-    observe({
-        if(input$select_all == 0) return()
-        values$evtypes <- evtypes
-    })
-    
-    output$evtypeControls <- renderUI({
-        checkboxGroupInput('evtypes', 'Event types', evtypes, selected=values$evtypes)
-    })
-    
+    # Prepare dataset for downloads
     dataTable <- reactive({
         dt.agg()[, list(
             State=state.abb[match(STATE, tolower(state.name))],
@@ -90,9 +74,34 @@ shinyServer(function(input, output, session) {
         ]   
     })
     
-    output$table <- renderDataTable(
-        {dataTable()}, options = list(bFilter = FALSE, iDisplayLength = 50))
+   
+    # Render Plots
     
+    # Population impact by state
+    output$populationImpactByState <- renderPlot({
+        print(plot_impact_by_state (
+            dt = compute_affected(dt.agg(), input$populationCategory),
+            states_map = states_map, 
+            year_min = input$range[1],
+            year_max = input$range[2],
+            title = "Population impact %d - %d (number of affected)",
+            fill = "Affected"
+        ))
+    })
+    
+    # Economic impact by state
+    output$economicImpactByState <- renderPlot({
+        print(plot_impact_by_state(
+            dt = compute_damages(dt.agg(), input$economicCategory),
+            states_map = states_map, 
+            year_min = input$range[1],
+            year_max = input$range[2],
+            title = "Economic impact %d - %d (Million USD)",
+            fill = "Damages"
+        ))
+    })
+    
+    # Events by year
     output$eventsByYear <- renderChart({
         data <- dt.agg.year()
         
@@ -108,6 +117,7 @@ shinyServer(function(input, output, session) {
         return(eventsByYear)
     })
     
+    # Population impact by year
     output$populationImpact <- renderChart({
         plot_impact_by_year(
             dt = dt.agg.year() %>% select(Year, Injuries, Fatalities),
@@ -117,6 +127,7 @@ shinyServer(function(input, output, session) {
         )
     })
     
+    # Economic impact by state
     output$economicImpact <- renderChart({
         plot_impact_by_year(
             dt = dt.agg.year() %>% select(Year, Crops, Property),
@@ -124,6 +135,10 @@ shinyServer(function(input, output, session) {
             yAxisLabel = "Total damage (Million USD)"
         )
     })
+    
+    # Render data table and create download handler
+    output$table <- renderDataTable(
+        {dataTable()}, options = list(bFilter = FALSE, iDisplayLength = 50))
     
     output$downloadData <- downloadHandler(
         filename = 'data.csv',
