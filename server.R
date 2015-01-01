@@ -49,7 +49,12 @@ aggregate_by_year <- function(dt, year_min, year_max, evtypes) {
     # Group and aggregate
     group_by(YEAR) %>% summarise_each(funs(sum), COUNT:CROPDMG) %>%
     # Round
-    mutate_each(funs(round_2), PROPDMG, CROPDMG)    
+    mutate_each(funs(round_2), PROPDMG, CROPDMG) %>%
+    rename(
+        Year = YEAR, Count = COUNT,
+        Fatalities = FATALITIES, Injuries = INJURIES,
+        Property = PROPDMG, Crops = CROPDMG
+    )
 }
 
 #' Add Affected column based on category
@@ -99,7 +104,8 @@ compute_damages <- function(dt, category) {
 plot_population_impact_by_state <- function (dt, states_map, year_min, year_max) {
     title <- paste("Population impact", year_min, "-", year_max, "(number of affected)")
     p <- ggplot(dt, aes(map_id = STATE))
-    p <- p + geom_map(aes(fill = Affected), map = states_map, colour='black') + expand_limits(x = states_map$long, y = states_map$lat)
+    p <- p + geom_map(aes(fill = Affected), map = states_map, colour='black')
+    p <- p + expand_limits(x = states_map$long, y = states_map$lat)
     p <- p + coord_map() + theme_bw()
     p <- p + labs(x = "Long", y = "Lat", title = title)
     p + scale_fill_gradient(low = "#fff5eb", high = "#d94801")
@@ -116,10 +122,29 @@ plot_population_impact_by_state <- function (dt, states_map, year_min, year_max)
 plot_economic_impact_by_state <- function (dt, states_map, year_min, year_max) {
     title <- paste("Economic impact", year_min, "-", year_max, "(Million USD)")
     p <- ggplot(dt, aes(map_id = STATE))
-    p <- p + geom_map(aes(fill = Damages), map = states_map, colour='black') + expand_limits(x = states_map$long, y = states_map$lat)
+    p <- p + geom_map(aes_string(fill = "Damages"), map = states_map, colour='black')
+    p <- p + expand_limits(x = states_map$long, y = states_map$lat)
     p <- p + coord_map() + theme_bw()
     p <- p + labs(x = "Long", y = "Lat", title = title)
     p + scale_fill_gradient(low = "#fff5eb", high = "#d94801")
+}
+
+#' @param dt data.table
+#' @param year_min integer
+#' @param year_max integer
+#' @return plot
+#' 
+plot_impact_by_year <- function(dt, dom, yAxisLabel, desc = FALSE) {
+    impactPlot <- nPlot(
+        value ~ Year, group = "variable",
+        data = melt(dt, id="Year") %>% arrange(Year, if (desc) { desc(variable) } else { variable }),
+        type = "stackedAreaChart", dom = dom, width = 650
+    )
+    impactPlot$chart(margin = list(left = 100))
+    impactPlot$yAxis(axisLabel = yAxisLabel, width = 80)
+    impactPlot$xAxis(axisLabel = "Year", width = 70)
+    
+    impactPlot
 }
 
 # Load data
@@ -194,9 +219,8 @@ shinyServer(function(input, output, session) {
         {dataTable()}, options = list(bFilter = FALSE, iDisplayLength = 50))
     
     output$eventsByYear <- renderChart({
-        data <- dt.agg.year()[, list(COUNT=sum(COUNT)), by=list(YEAR)]
-        setnames(data, c('YEAR', 'COUNT'), c("Year", "Count"))
- 
+        data <- dt.agg.year()
+        
         eventsByYear <- nPlot(
             Count ~ Year,
             data = data[order(data$Year)],
@@ -210,38 +234,22 @@ shinyServer(function(input, output, session) {
     })
     
     output$populationImpact <- renderChart({
-        data <- melt(
-            dt.agg.year()[, list(Year=YEAR, Injuries=INJURIES, Fatalities=FATALITIES)],
-            id='Year'
+        plot_impact_by_year(
+            dt = dt.agg.year() %>% select(Year, Injuries, Fatalities),
+            dom = "populationImpact",
+            yAxisLabel = "Affected",
+            desc = TRUE
         )
-        populationImpact <- nPlot(
-            value ~ Year, group = 'variable', data = data[order(-Year, variable, decreasing = T)],
-            type = 'stackedAreaChart', dom = 'populationImpact', width = 650
-        )
-        
-        populationImpact$chart(margin = list(left = 100))
-        populationImpact$yAxis( axisLabel = "Affected", width = 80)
-        populationImpact$xAxis( axisLabel = "Year", width = 70)
-        
-        return(populationImpact)
     })
     
     output$economicImpact <- renderChart({
-        data <- melt(
-            dt.agg.year()[, list(Year=YEAR, Propety=PROPDMG, Crops=CROPDMG)],
-            id='Year'
+        plot_impact_by_year(
+            dt = dt.agg.year() %>% select(Year, Crops, Property),
+            dom = "economicImpact",
+            yAxisLabel = "Total damage (Million USD)"
         )
-        economicImpact <- nPlot(
-            value ~ Year, group = 'variable', data = data[order(-Year, variable, decreasing = T)],
-            type = 'stackedAreaChart', dom = 'economicImpact', width = 650
-        )
-        economicImpact$chart(margin = list(left = 100))
-        economicImpact$yAxis( axisLabel = "Total damage (Million USD)", width = 80)
-        economicImpact$xAxis( axisLabel = "Year", width = 70)
-        
-        return(economicImpact)
     })
-  
+    
     output$downloadData <- downloadHandler(
         filename = 'data.csv',
         content = function(file) {
