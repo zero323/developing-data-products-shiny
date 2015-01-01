@@ -198,9 +198,7 @@ shinyServer(function(input, output, session) {
     })
     
     output$evtypeControls <- renderUI({
-        if(1) {
-            checkboxGroupInput('evtypes', 'Event types', evtypes, selected=values$evtypes)
-        }
+        checkboxGroupInput('evtypes', 'Event types', evtypes, selected=values$evtypes)
     })
     
     dataTable <- reactive({
