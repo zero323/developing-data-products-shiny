@@ -93,42 +93,30 @@ compute_damages <- function(dt, category) {
     })
 }
 
-#' Prepare map of population impact
+#' Prepare map of economic or population impact
 #' 
 #' @param dt data.table
 #' @param states_map data.frame returned from map_data("state")
 #' @param year_min integer
 #' @param year_max integer
+#' @param fill character name of the variable
+#' @param title character
+#' @param low character hex
+#' @param high character hex
 #' @return ggplot
 #' 
-plot_population_impact_by_state <- function (dt, states_map, year_min, year_max) {
-    title <- paste("Population impact", year_min, "-", year_max, "(number of affected)")
+plot_impact_by_state <- function (dt, states_map, year_min, year_max, fill, title, low = "#fff5eb", high = "#d94801") {
+    title <- sprintf(title, year_min, year_max)
     p <- ggplot(dt, aes(map_id = STATE))
-    p <- p + geom_map(aes(fill = Affected), map = states_map, colour='black')
+    p <- p + geom_map(aes_string(fill = fill), map = states_map, colour='black')
     p <- p + expand_limits(x = states_map$long, y = states_map$lat)
     p <- p + coord_map() + theme_bw()
     p <- p + labs(x = "Long", y = "Lat", title = title)
-    p + scale_fill_gradient(low = "#fff5eb", high = "#d94801")
+    p + scale_fill_gradient(low = low, high = high)
 }
 
-#' Prepare map of economic impact
-#' 
-#' @param dt data.table
-#' @param states_map data.frame returned from map_data("state")
-#' @param year_min integer
-#' @param year_max integer
-#' @return ggplot
-#' 
-plot_economic_impact_by_state <- function (dt, states_map, year_min, year_max) {
-    title <- paste("Economic impact", year_min, "-", year_max, "(Million USD)")
-    p <- ggplot(dt, aes(map_id = STATE))
-    p <- p + geom_map(aes_string(fill = "Damages"), map = states_map, colour='black')
-    p <- p + expand_limits(x = states_map$long, y = states_map$lat)
-    p <- p + coord_map() + theme_bw()
-    p <- p + labs(x = "Long", y = "Lat", title = title)
-    p + scale_fill_gradient(low = "#fff5eb", high = "#d94801")
-}
-
+#' Prepare plots of impact by year
+#'
 #' @param dt data.table
 #' @param year_min integer
 #' @param year_max integer
@@ -168,23 +156,26 @@ shinyServer(function(input, output, session) {
     dt.agg.year <- reactive({
         aggregate_by_year(dt, input$range[1], input$range[2], input$evtypes)
     })
-        
    
     output$populationImpactByState <- renderPlot({
-        print(plot_population_impact_by_state (
+        print(plot_impact_by_state (
             dt = compute_affected(dt.agg(), input$populationCategory),
             states_map = states_map, 
             year_min = input$range[1],
-            year_max = input$range[2]
+            year_max = input$range[2],
+            title = "Population impact %d - %d (number of affected)",
+            fill = "Affected"
         ))
     })
     
     output$economicImpactByState <- renderPlot({
-        print(plot_economic_impact_by_state(
+        print(plot_impact_by_state(
             dt = compute_damages(dt.agg(), input$economicCategory),
             states_map = states_map, 
             year_min = input$range[1],
-            year_max = input$range[2]
+            year_max = input$range[2],
+            title = "Economic impact %d - %d (Million USD)",
+            fill = "Damages"
         ))
     })
     
