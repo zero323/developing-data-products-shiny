@@ -1,13 +1,21 @@
 library(shiny)
+
+# Plotting 
 library(ggplot2)
-library(data.table)
-library(maps)
 library(rCharts)
-library(reshape2)
-library(markdown)
-library(mapproj)
 library(ggvis)
+
+# Data processing libraries
+library(data.table)
+library(reshape2)
 library(dplyr)
+
+# Required by includeMarkdown
+library(markdown)
+
+# It has to loaded to plot ggplot maps on shinyapps.io
+library(mapproj)
+library(maps)
 
 #' Aggregate dataset by state
 #' 
