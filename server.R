@@ -103,18 +103,7 @@ shinyServer(function(input, output, session) {
     
     # Events by year
     output$eventsByYear <- renderChart({
-        data <- dt.agg.year()
-        
-        eventsByYear <- nPlot(
-            Count ~ Year,
-            data = data[order(data$Year)],
-            type = "lineChart", dom = 'eventsByYear', width = 650
-        )
-        
-        eventsByYear$chart(margin = list(left = 100))
-        eventsByYear$yAxis( axisLabel = "Count", width = 80)
-        eventsByYear$xAxis( axisLabel = "Year", width = 70)
-        return(eventsByYear)
+       plot_events_by_year(dt.agg.year())
     })
     
     # Population impact by year
