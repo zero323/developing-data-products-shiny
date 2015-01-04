@@ -107,8 +107,9 @@ plot_impact_by_state <- function (dt, states_map, year_min, year_max, fill, titl
 #' Prepare plots of impact by year
 #'
 #' @param dt data.table
-#' @param year_min integer
-#' @param year_max integer
+#' @param dom
+#' @param yAxisLabel
+#' @param desc
 #' @return plot
 #' 
 plot_impact_by_year <- function(dt, dom, yAxisLabel, desc = FALSE) {
