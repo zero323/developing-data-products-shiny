@@ -144,3 +144,18 @@ plot_events_by_year <- function(dt, dom = "eventsByYear", yAxisLabel = "Count") 
     eventsByYear$xAxis( axisLabel = "Year", width = 70)
     eventsByYear
 }
+
+#' Prepare dataset for downloads
+#'
+#' @return data.table
+
+prepare_downolads <- function(dt) {
+    dt[, list(
+        State=state.abb[match(STATE, tolower(state.name))],
+        Count=COUNT,
+        Injuries=INJURIES,
+        Fatalities=FATALITIES,
+        Property.damage=PROPDMG,
+        Crops.damage=CROPDMG)
+       ]   
+}

@@ -64,17 +64,9 @@ shinyServer(function(input, output, session) {
     
     # Prepare dataset for downloads
     dataTable <- reactive({
-        dt.agg()[, list(
-            State=state.abb[match(STATE, tolower(state.name))],
-            Count=COUNT,
-            Injuries=INJURIES,
-            Fatalities=FATALITIES,
-            Property.damage=PROPDMG,
-            Crops.damage=CROPDMG)
-        ]   
+        prepare_downolads(dt.agg())
     })
     
-   
     # Render Plots
     
     # Population impact by state
