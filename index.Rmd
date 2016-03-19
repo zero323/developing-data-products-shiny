@@ -1,0 +1,92 @@
+---
+title       : Storm Database Explorer
+subtitle    : 
+author      : Maciej
+job         : 
+framework   : revealjs        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []           # {mathjax, quiz, bootstrap}
+ext_widgets : {rCharts: libraries/nvd3}
+mode        : selfcontained # {standalone, draft}
+revealjs:
+  theme: simple
+
+--- .custom
+
+# Storm Database Explorer
+
+
+
+```{r, echo=FALSE}
+library(data.table)
+library(rCharts)
+library(reshape2)
+
+dt <- fread('data/events.agg.csv')
+dt.agg.year <- dt[, list(Count=sum(COUNT), Injuries=sum(INJURIES), Fatalities=sum(FATALITIES)), by=list(YEAR)]
+```
+
+
+--- .custom
+
+## Between 1950 and 2011 severe weather events caused at least
+
+ - `r format(sum(dt$FATALITIES), big.mark=' ')` deaths
+ - `r format(sum(dt$INJURIES), big.mark=' ')` injuries
+ - $`r format(round((sum(dt$PROPDMG) + sum(dt$CROPDMG)) / 1000), big.mark=' ')` billion worth of damage
+ 
+
+--- &custom .custom
+
+## Now you can prepare yourself using Storm Database Explorer
+
+
+
+ - state of the art user interface*
+ - high quality data**
+ - fast and reliable***
+ - 100% Open source 
+
+- - -
+
+*** =foo
+
+- * If you really determined there is a chance you'll find worse.
+- ** There is small chance it could be worse.
+- *** It works. Most of the time.
+
+--- .custom
+
+## ... and it can generate cool plots
+
+
+```{r nvd3plot2, results = 'asis', comment = NA, message = F, echo = F} 
+
+data <- melt(dt.agg.year[, list(YEAR=YEAR, Injuries=Injuries, Fatalities=Fatalities)], id='YEAR')
+populationImpact <- nPlot(
+    value ~ YEAR, group = 'variable', data = data[order(-YEAR, variable, decreasing = T)],
+    type = 'stackedAreaChart', dom = 'populationImpact'
+)
+        
+populationImpact$chart(margin = list(left = 100))
+populationImpact$yAxis( axisLabel = "Affected", width = 80)
+populationImpact$xAxis( axisLabel = "Year", width = 70)
+        
+populationImpact
+```
+
+--- .custom
+
+## Are you interested?
+
+- visit us on shinyapps.io [(bit.ly/1kLwP06)](http://bit.ly/1kLwP06)
+- fork on GitHub ([bit.ly/1nrtceI](http://bit.ly/1nrtceI))
+-  enroll on [Coursera Data Science Specialization](https://www.coursera.org/specialization/jhudatascience/1) and learn how to build your own
+
+
+
+
+
+
+

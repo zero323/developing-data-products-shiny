@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Storm Database Explorer</title>
+  <meta name="description" content="">
+  <meta name="author" content="Maciej">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/theme/simple.css" id="theme">
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='custom' data-state='' id='slide-1'>
+  <h1>Storm Database Explorer</h1>
+  
+</section>
+<section class='custom' data-state='' id='slide-2'>
+  <h2>Between 1950 and 2011 severe weather events caused at least</h2>
+  <ul>
+<li>14 834 deaths</li>
+<li>139 445 injuries</li>
+<li>$358 billion worth of damage</li>
+</ul>
+
+</section>
+<section class='custom' data-state='' id='slide-3'>
+  <h2>Now you can prepare yourself using Storm Database Explorer</h2>
+  <ul>
+<li>state of the art user interface*</li>
+<li>high quality data**</li>
+<li>fast and reliable***</li>
+<li>100% Open source </li>
+</ul>
+
+<hr>
+
+
+<div class='notes'>
+    <ul>
+<li>* If you really determined there is a chance you&#39;ll find worse.</li>
+<li>** There is small chance it could be worse.</li>
+<li>*** It works. Most of the time.</li>
+</ul>
+
+</div>
+
+
+</section>
+<section class='custom' data-state='' id='slide-4'>
+  <h2>... and it can generate cool plots</h2>
+  <iframe src='
+assets/fig/nvd3plot2.html
+' scrolling='no' seamless
+class='rChart nvd3 '
+id=iframe-
+populationImpact
+></iframe>
+
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+</section>
+<section class='custom' data-state='' id='slide-5'>
+  <h2>Are you interested?</h2>
+  <ul>
+<li>visit us on shinyapps.io <a href="http://bit.ly/1kLwP06">(bit.ly/1kLwP06)</a></li>
+<li>fork on GitHub (<a href="http://bit.ly/1nrtceI">bit.ly/1nrtceI</a>)</li>
+<li> enroll on <a href="https://www.coursera.org/specialization/jhudatascience/1">Coursera Data Science Specialization</a> and learn how to build your own</li>
+</ul>
+
+</section>
+    </div>
+  </div>
+</body>
+  <script src="libraries/frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="libraries/frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'simple', 
+    transition: Reveal.getQueryHash().transition || 'default', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: 'libraries/frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: 'libraries/frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: 'libraries/frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: 'libraries/frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>  <!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>

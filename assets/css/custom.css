@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Francois One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Francois One Regular'), local('FrancoisOne-Regular'), url(http://themes.googleusercontent.com/static/fonts/francoisone/v7/bYbkq2nU2TSx4SwFbz5sCHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+
+.custom h1, .custom h2 {
+    font-family: 'Francois One', sans-serif;
+}
+
+.custom h2 {
+    font-size: 1.8em;
+}
+
+
+.notes ul {
+    font-size: 0.6em;
+    list-style-type: none;
+}
